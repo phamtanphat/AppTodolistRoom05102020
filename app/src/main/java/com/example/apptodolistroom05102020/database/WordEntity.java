@@ -12,7 +12,7 @@ public class WordEntity {
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = 'id')
+    @ColumnInfo(name = "id")
     private int id;
 
     @ColumnInfo(name = "en")
@@ -21,7 +21,7 @@ public class WordEntity {
     @ColumnInfo(name = "vn")
     private String vn;
 
-    @ColumnInfo(name = "ismemorized" , defaultValue = 0)
+    @ColumnInfo(name = "ismemorized" , defaultValue = "0")
     private Integer ismemorized;
 
     @Ignore

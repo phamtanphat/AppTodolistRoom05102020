@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -12,11 +13,10 @@ import com.example.apptodolistroom05102020.repository.WordRepository;
 
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class WordViewModel extends AndroidViewModel {
     private WordRepository mWordRepo;
@@ -25,7 +25,7 @@ public class WordViewModel extends AndroidViewModel {
     public WordViewModel(@NonNull Application application) {
         super(application);
         mWords = new MutableLiveData<>();
-        mWordRepo = WordRepository.getInstance(application.getApplicationContext());
+        mWordRepo = WordRepository.getInstance(application);
     }
 
     public void fetchWords(){
@@ -35,17 +35,17 @@ public class WordViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<WordEntity>>() {
                     @Override
-                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<WordEntity> wordEntities) {
+                    public void onNext(@io.reactivex.annotations.NonNull List<WordEntity> wordEntities) {
                         mWords.setValue(wordEntities);
                     }
 
                     @Override
-                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
 
                     }
 
@@ -54,5 +54,9 @@ public class WordViewModel extends AndroidViewModel {
 
                     }
                 });
+    }
+
+    public LiveData<List<WordEntity>> getWords(){
+        return mWords;
     }
 }
