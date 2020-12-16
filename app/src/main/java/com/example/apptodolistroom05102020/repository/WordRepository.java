@@ -30,4 +30,7 @@ public class WordRepository {
     public Observable<List<WordEntity>> getAllWords(){
         return wordDao.getAllWords();
     }
+    public Observable<Long> insertWord(WordEntity wordEntity){
+        return wordDao.insertWord(wordEntity);
+    }
 }

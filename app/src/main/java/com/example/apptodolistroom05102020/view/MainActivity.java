@@ -30,6 +30,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mViewModel.fetchWords();
+//        mViewModel.fetchWords();
+
+        mViewModel.getIdInsert().observe(this, new Observer<Long>() {
+            @Override
+            public void onChanged(Long aLong) {
+                Log.d("BBB","Id dong " + aLong);
+            }
+        });
+
+        mViewModel.insertWord(new WordEntity("One","Mot",0));
+
     }
 }
