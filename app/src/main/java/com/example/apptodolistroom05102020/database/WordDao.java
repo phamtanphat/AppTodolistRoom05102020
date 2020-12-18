@@ -8,6 +8,7 @@ import androidx.room.Query;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 
 
@@ -18,6 +19,6 @@ public interface WordDao {
     Observable<List<WordEntity>> getAllWords();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Observable<Long> insertWord(WordEntity wordEntity);
+    Maybe<Long> insertWord(WordEntity wordEntity);
 
 }

@@ -13,6 +13,7 @@ import com.example.apptodolistroom05102020.repository.WordRepository;
 
 import java.util.List;
 
+import io.reactivex.MaybeObserver;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -64,17 +65,17 @@ public class WordViewModel extends AndroidViewModel {
 
     public void insertWord(WordEntity wordEntity){
         mWordRepo
-                .insertWord()
+                .insertWord(wordEntity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Long>() {
+                .subscribe(new MaybeObserver<Long>() {
                     @Override
                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@io.reactivex.annotations.NonNull Long aLong) {
+                    public void onSuccess(@io.reactivex.annotations.NonNull Long aLong) {
                         mIdInsert.setValue(aLong);
                     }
 

@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(WordViewModel.class);
 
-
         mViewModel.getWords().observe(this, new Observer<List<WordEntity>>() {
             @Override
             public void onChanged(List<WordEntity> wordEntities) {

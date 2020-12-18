@@ -9,6 +9,7 @@ import com.example.apptodolistroom05102020.database.WordEntity;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 
 
@@ -30,7 +31,7 @@ public class WordRepository {
     public Observable<List<WordEntity>> getAllWords(){
         return wordDao.getAllWords();
     }
-    public Observable<Long> insertWord(WordEntity wordEntity){
+    public Maybe<Long> insertWord(WordEntity wordEntity){
         return wordDao.insertWord(wordEntity);
     }
 }
