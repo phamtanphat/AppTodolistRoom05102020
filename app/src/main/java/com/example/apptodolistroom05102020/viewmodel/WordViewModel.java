@@ -16,6 +16,7 @@ import org.reactivestreams.Subscription;
 
 import java.util.List;
 
+import io.reactivex.CompletableObserver;
 import io.reactivex.MaybeObserver;
 import io.reactivex.Observer;
 import io.reactivex.SingleObserver;
@@ -29,12 +30,14 @@ public class WordViewModel extends AndroidViewModel {
     private MutableLiveData<List<WordEntity>> mWords;
     private MutableLiveData<Long> mIdInsert;
     private MutableLiveData<Integer> mIdUpdate;
+    private MutableLiveData<Boolean> mResultDelete;
 
     public WordViewModel(@NonNull Application application) {
         super(application);
         mWords = new MutableLiveData<>();
         mIdInsert = new MutableLiveData<>();
         mIdUpdate = new MutableLiveData<>();
+        mResultDelete = new MutableLiveData<>();
         mWordRepo = WordRepository.getInstance(application);
     }
 
@@ -127,5 +130,32 @@ public class WordViewModel extends AndroidViewModel {
 
     public LiveData<Integer> getIdUpdate(){
         return mIdUpdate;
+    }
+
+    public void deleteWord(Integer id){
+        mWordRepo
+                .deleteWord(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Integer>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@io.reactivex.annotations.NonNull Integer integer) {
+                        Log.d("BBB",integer   + "");
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+                    }
+                });
+    }
+
+    public LiveData<Boolean> getResultDelete(){
+        return mResultDelete;
     }
 }

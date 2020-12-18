@@ -31,6 +31,13 @@ public class WordEntity {
         this.ismemorized = ismemorized;
     }
 
+    public WordEntity(int id , String en, String vn, Integer ismemorized) {
+        this.id = id;
+        this.en = en;
+        this.vn = vn;
+        this.ismemorized = ismemorized;
+    }
+
     public WordEntity() {
     }
 

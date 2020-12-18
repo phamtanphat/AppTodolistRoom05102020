@@ -9,6 +9,7 @@ import com.example.apptodolistroom05102020.database.WordEntity;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
@@ -39,5 +40,9 @@ public class WordRepository {
 
     public Maybe<Integer> updateWord(WordEntity wordEntity){
         return wordDao.updateWord(wordEntity);
+    }
+
+    public Single<Integer> deleteWord(Integer id){
+        return wordDao.deleteWord(id);
     }
 }
