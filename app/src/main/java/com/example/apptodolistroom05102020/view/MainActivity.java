@@ -22,23 +22,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(WordViewModel.class);
 
+        mViewModel.getIdUpdate().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                Log.d("BBB",integer + "");
+            }
+        });
         mViewModel.getWords().observe(this, new Observer<List<WordEntity>>() {
             @Override
             public void onChanged(List<WordEntity> wordEntities) {
-                Log.d("BBB",wordEntities.size() + "");
+                WordEntity wordEntity = wordEntities.get(0);
+                wordEntity.setIsmemorized(1);
+                mViewModel.updateWord(wordEntity);
             }
         });
 
-//        mViewModel.fetchWords();
+        mViewModel.fetchWords();
 
-        mViewModel.getIdInsert().observe(this, new Observer<Long>() {
-            @Override
-            public void onChanged(Long aLong) {
-                Log.d("BBB","Id dong " + aLong);
-            }
-        });
+//        mViewModel.getIdInsert().observe(this, new Observer<Long>() {
+//            @Override
+//            public void onChanged(Long aLong) {
+//                Log.d("BBB","Id dong " + aLong);
+//            }
+//        });
+//
+//        mViewModel.insertWord(new WordEntity("One","Mot",0));
 
-        mViewModel.insertWord(new WordEntity("One","Mot",0));
 
     }
 }
