@@ -21,8 +21,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordHolder> {
     List<WordEntity> mArrWords;
     Context mContext;
     public WordAdapter(List<WordEntity> mArrWords) {
-        this.mArrWords = new ArrayList<>();
-        this.mArrWords.addAll(mArrWords);
+        this.mArrWords = mArrWords;
     }
 
     @NonNull

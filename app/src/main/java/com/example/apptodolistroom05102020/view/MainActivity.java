@@ -15,9 +15,11 @@ import android.widget.Spinner;
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.apptodolistroom05102020.R;
 import com.example.apptodolistroom05102020.database.WordEntity;
+import com.example.apptodolistroom05102020.view.adapter.WordAdapter;
 import com.example.apptodolistroom05102020.viewmodel.WordViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
     CardView mCarForm;
     PullRefreshLayout mPullRefreshLayout;
     RecyclerView mRcvWord;
+    WordAdapter mWordAdapter;
     boolean isOpenForm = false;
+    List<WordEntity> mWordEntities;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
         mCarForm = findViewById(R.id.carViewForm);
         mPullRefreshLayout = findViewById(R.id.pullRefreshLayout);
         mRcvWord = findViewById(R.id.recyclerViewWord);
-
+        mWordEntities = new ArrayList<>();
+        mWordAdapter = new WordAdapter(mWordEntities);
         //Data
         mViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(WordViewModel.class);
     }
@@ -89,10 +94,19 @@ public class MainActivity extends AppCompatActivity {
             showView(mBtnOpenForm);
             hideView(mCarForm);
         }
+        mRcvWord.setAdapter(mWordAdapter);
     }
     private void observerData() {
+        mViewModel.getWords().observe(this, new Observer<List<WordEntity>>() {
+            @Override
+            public void onChanged(List<WordEntity> wordEntities) {
+                mWordEntities.addAll(wordEntities);
+                mWordAdapter.notifyDataSetChanged();
+            }
+        });
     }
     private void event() {
+        mViewModel.fetchWords();
         mBtnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
