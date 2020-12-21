@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.example.apptodolistroom05102020.R;
 import com.example.apptodolistroom05102020.database.WordEntity;
 import com.example.apptodolistroom05102020.viewmodel.WordViewModel;
@@ -24,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     Button mBtnAddWord,mBtnCancel, mBtnOpenForm;
     Spinner mSpinnerFilter;
     CardView mCarForm;
+    PullRefreshLayout mPullRefreshLayout;
+    RecyclerView mRcvWord;
     boolean isOpenForm = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
         mBtnOpenForm = findViewById(R.id.buttonOpenForm);
         mSpinnerFilter = findViewById(R.id.spinner);
         mCarForm = findViewById(R.id.carViewForm);
+        mPullRefreshLayout = findViewById(R.id.pullRefreshLayout);
+        mRcvWord = findViewById(R.id.recyclerViewWord);
+
         //Data
         mViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(WordViewModel.class);
     }

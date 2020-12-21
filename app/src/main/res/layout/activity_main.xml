@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@color/color_white_01"
     tools:context=".view.MainActivity">
-
     <LinearLayout
         android:id="@+id/linearForm"
         android:padding="5dp"
@@ -122,6 +121,17 @@
         android:layout_margin="8dp"
         android:layout_width="match_parent"
         android:layout_height="40dp"/>
+    <com.baoyz.widget.PullRefreshLayout
+        app:refreshType="water_drop"
+        android:id="@+id/pullRefreshLayout"
+        android:layout_below="@id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewWord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.baoyz.widget.PullRefreshLayout>
 
 </RelativeLayout>
