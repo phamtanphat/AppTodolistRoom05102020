@@ -122,7 +122,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"/>
     <com.baoyz.widget.PullRefreshLayout
-        app:refreshType="water_drop"
+        app:refreshType="ring"
         android:id="@+id/pullRefreshLayout"
         android:layout_below="@id/spinner"
         android:layout_width="match_parent"
@@ -135,5 +135,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </com.baoyz.widget.PullRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            layout="@layout/layout_loading_view"/>
+    </LinearLayout>
 
 </RelativeLayout>

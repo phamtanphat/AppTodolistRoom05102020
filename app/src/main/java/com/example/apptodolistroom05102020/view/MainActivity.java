@@ -10,11 +10,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.apptodolistroom05102020.R;
 import com.example.apptodolistroom05102020.database.WordEntity;
+import com.example.apptodolistroom05102020.interfaces.OnListenLoading;
 import com.example.apptodolistroom05102020.view.adapter.WordAdapter;
 import com.example.apptodolistroom05102020.viewmodel.WordViewModel;
 import com.google.android.material.textfield.TextInputEditText;
@@ -22,17 +24,20 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnListenLoading {
     WordViewModel mViewModel;
     TextInputEditText mTextInputEn, mTextInputVn;
     Button mBtnAddWord,mBtnCancel, mBtnOpenForm;
+    LinearLayout mLinearLayoutLoading;
     Spinner mSpinnerFilter;
     CardView mCarForm;
     PullRefreshLayout mPullRefreshLayout;
     RecyclerView mRcvWord;
     WordAdapter mWordAdapter;
     boolean isOpenForm = false;
+    boolean mIsLoading = false;
     List<WordEntity> mWordEntities;
+    OnListenLoading mOnListenLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,11 +85,15 @@ public class MainActivity extends AppCompatActivity {
         mSpinnerFilter = findViewById(R.id.spinner);
         mCarForm = findViewById(R.id.carViewForm);
         mPullRefreshLayout = findViewById(R.id.pullRefreshLayout);
+        mLinearLayoutLoading = findViewById(R.id.linearLoading);
         mRcvWord = findViewById(R.id.recyclerViewWord);
         mWordEntities = new ArrayList<>();
         mWordAdapter = new WordAdapter(mWordEntities);
         //Data
         mViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(WordViewModel.class);
+
+        // interface
+        mOnListenLoading = this::onLoading;
     }
     private void mapView() {
         if (isOpenForm){
@@ -94,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             showView(mBtnOpenForm);
             hideView(mCarForm);
         }
+        mOnListenLoading.onLoading(mIsLoading);
         mRcvWord.setAdapter(mWordAdapter);
     }
     private void observerData() {
@@ -119,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showView(mCarForm);
                 hideView(mBtnOpenForm);
+                mIsLoading = false;
+                mOnListenLoading.onLoading(mIsLoading);
             }
         });
     }
@@ -128,5 +140,14 @@ public class MainActivity extends AppCompatActivity {
     }
     private void showView(View view){
         view.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onLoading(Boolean isLoading) {
+        if (mIsLoading) {
+            showView(mLinearLayoutLoading);
+        }else{
+            hideView(mLinearLayoutLoading);
+        }
     }
 }
