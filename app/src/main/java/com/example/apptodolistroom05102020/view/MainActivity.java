@@ -7,11 +7,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.apptodolistroom05102020.R;
@@ -38,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements OnListenLoading {
     boolean mIsLoading = false;
     List<WordEntity> mWordEntities;
     OnListenLoading mOnListenLoading;
+    ArrayAdapter mAdapterSpinner;
+    String[] mArrayFilter = {"SHOW ALL" , "SHOW FORGOT" , "SHOW MEMORIZED"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements OnListenLoading {
         mWordAdapter = new WordAdapter(mWordEntities);
         //Data
         mViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(WordViewModel.class);
-
+        mAdapterSpinner = new ArrayAdapter(this , android.R.layout.simple_spinner_dropdown_item,mArrayFilter);
         // interface
         mOnListenLoading = this::onLoading;
     }
@@ -105,11 +111,16 @@ public class MainActivity extends AppCompatActivity implements OnListenLoading {
         }
         mOnListenLoading.onLoading(mIsLoading);
         mRcvWord.setAdapter(mWordAdapter);
+        mSpinnerFilter.setAdapter(mAdapterSpinner);
     }
     private void observerData() {
         mViewModel.getWords().observe(this, new Observer<List<WordEntity>>() {
             @Override
             public void onChanged(List<WordEntity> wordEntities) {
+                if (mIsLoading){
+                    mIsLoading = false;
+                    mOnListenLoading.onLoading(mIsLoading);
+                }
                 mWordEntities.addAll(wordEntities);
                 mWordAdapter.notifyDataSetChanged();
             }
@@ -129,8 +140,34 @@ public class MainActivity extends AppCompatActivity implements OnListenLoading {
             public void onClick(View v) {
                 showView(mCarForm);
                 hideView(mBtnOpenForm);
-                mIsLoading = false;
+            }
+        });
+        mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mIsLoading = true;
                 mOnListenLoading.onLoading(mIsLoading);
+                mWordEntities.clear();
+                mWordAdapter.notifyDataSetChanged();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mViewModel.fetchWords();
+                    }
+                },2000);
+
+
+            }
+        });
+        mSpinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, mArrayFilter[position], Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
@@ -149,5 +186,8 @@ public class MainActivity extends AppCompatActivity implements OnListenLoading {
         }else{
             hideView(mLinearLayoutLoading);
         }
+        mPullRefreshLayout.setRefreshing(isLoading);
     }
 }
+// Show forgot : Những từ đã thuộc (ismemorized = true) hiển thị
+// Show memorized : Những từ chưa thuộc (ismemorized = false) hiển thị
